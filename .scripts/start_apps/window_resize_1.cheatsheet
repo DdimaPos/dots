@@ -1,0 +1,6 @@
+case "$direction" in
+		north) bspc node -z top 0 -"$size" ;;
+		east) bspc node -z right "$size" 0 ;;
+		south) bspc node -z bottom 0 "$size" ;;
+		west) bspc node -z left -"$size" 0 ;;
+	esac
