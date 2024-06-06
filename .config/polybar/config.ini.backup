@@ -1,0 +1,273 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[colors]
+background = #E62F2F2F
+background-alt = #E66e6d6d
+foreground = #f394a9
+primary = #f47394
+secondary = #f32454
+alert = #f32454
+disabled = #E4D0D5
+cpu-color = #3471eb
+active-window-underline = #04dcb3
+
+[bar/example]
+width = 100%
+height = 25px
+radius = 0  
+
+; dpi = 96
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3pt
+
+border = 10px
+border-top=4px
+border-bottom=4px
+border-right=4px
+border-left=4px
+border-color = #04dcb3
+border-top-color=#00000000
+border-right-color=#00000000
+border-left-color=#00000000
+
+
+padding-top = 5px
+padding-left = 0px
+padding-right = 1
+
+module-margin = 1
+
+separator = 
+separator-foreground = ${colors.disabled}
+; font-N = <fontconfig pattern>;<vertical offset>
+font-0 = monospace;3
+font-1 = "NotoSans Nerd Font:size=17;5"
+
+modules-left = xworkspaces xwindow
+modules-center = memory cpu
+modules-right = pulseaudio battery xkeyboard wlan date
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+enable-ipc = true
+
+; wm-restack = generic
+wm-restack = bspwm
+; wm-restack = i3
+
+; override-redirect = true
+
+[module/systray]
+type = internal/tray
+
+format-margin = 8pt
+tray-spacing = 13pt
+
+[module/xworkspaces]
+type = internal/xworkspaces
+
+label-active = %name%
+label-active-background = ${colors.background-alt}
+label-active-underline= ${colors.active-window-underline}
+label-active-padding = 1
+
+label-occupied = %name%
+label-occupied-padding = 1
+
+label-urgent = %name%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+label-empty = %name%
+label-empty-foreground = ${colors.disabled}
+label-empty-padding = 1
+
+[module/xwindow]
+type = internal/xwindow
+label-active-font = 1
+label = %title:0:50:...%
+
+;[module/filesystem]
+;type = internal/fs
+;interval = 25
+
+;mount-0 = /
+
+;label-mounted = %{F#F0C674}%mountpoint%%{F-} %percentage_used%%
+
+;label-unmounted = %mountpoint% not mounted
+;label-unmounted-foreground = ${colors.disabled}
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.primary}
+label = %percentage_used:2%%
+
+[module/cpu]
+label-active-font = 1
+type = internal/cpu
+interval = 2
+format-prefix = "󰻠 "
+format-prefix-foreground = ${colors.primary}
+label = %percentage:2%%
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume-prefix = 
+format-volume-prefix-foreground = ${colors.primary}
+format-volume = <ramp-volume>
+ramp-volume-0=󰕿
+ramp-volume-1=󰖀
+ramp-volume-2=󰕾
+label-volume = 
+
+label-muted = 󰖁 
+label-muted-foreground = ${colors.disabled}
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+label-layout = %layout%
+label-layout-foreground = ${colors.primary}
+
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-foreground = ${colors.background}
+label-indicator-background = ${colors.secondary}
+
+
+
+
+
+[network-base]
+type = internal/network
+interval = 5
+format-connected = <label-connected>
+format-disconnected = <label-disconnected>
+label-disconnected = %{F#F0C674}%ifname%%{F#707880} disconnected
+
+[module/wlan]
+inherit = network-base
+interface-type = wireless 
+accumulate-stats = true
+speed-unit = 
+; %local_ip% - my ip
+format-connected = <ramp-signal> <label-connected>
+format-disconnected = <label-disconnected>
+
+label-connected = %netspeed%
+label-disconnected = 󰤭
+
+ramp-signal-0 = 󰤯
+ramp-signal-1 = 󰤟
+ramp-signal-2 = 󰤢
+ramp-signal-3 = 󰤥
+ramp-signal-4 = 󰤨
+
+;[module/eth]
+;inherit = network-base
+;interface-type = wired
+;label-connected = %{F#F0C674}%ifname%%{F-} %local_ip%
+
+[module/date]
+type = internal/date
+interval = 1
+
+date = %H:%M
+date-alt = %Y/%m/%d %H:%M:%S
+
+label = %date%
+label-foreground = ${colors.primary}
+
+[module/battery]
+type = internal/battery
+
+full-at = 99
+low-at = 10
+
+; $ ls -1 /sys/class/power_supply/
+battery = BAT0
+adapter = ADP0
+
+poll-interval = 5
+
+time-format = %H:%M
+format-charging = <animation-charging>
+format-discharging = <ramp-capacity> 
+format-full = <ramp-capacity>
+format-low = <animation-low>
+
+label-charging =
+label-discharging = 
+label-full =
+label-low = 
+
+ramp-capacity-0 = 󰁺
+ramp-capacity-1 = 󰁻
+ramp-capacity-2 = 󰁼
+ramp-capacity-3 = 󰁽
+ramp-capacity-4 = 󰁾
+ramp-capacity-5 = 󰁿
+ramp-capacity-6 = 󰂀
+ramp-capacity-7 = 󰂁
+ramp-capacity-8 = 󰂂
+ramp-capacity-9 = 󰁹 
+ramp-capacity-10 = 󰂄 
+bar-capacity-width = 10
+
+animation-charging-0 = 󰁻
+animation-charging-1 = 󰁽
+animation-charging-2 = 󰁿
+animation-charging-3 = 󰂁
+animation-charging-4 = 󰁹
+animation-charging-framerate = 910
+
+animation-discharging-0 = "q "
+animation-discharging-1 = "w "
+animation-discharging-2 = "e "
+animation-discharging-3 = "r "
+animation-discharging-4 = "t "
+animation-discharging-framerate = 500
+
+animation-low-0 = 󰂃
+animation-low-1 = 󰂎
+animation-low-framerate = 1500
+
+animation-low-foreground = #D35F5D
+format-charging-foreground = #61afef
+label-charging-foreground = ${colors.primary}
+format-discharging-foreground = ${colors.primary}
+label-discharging-foreground = ${colors.primary}
+format-full-prefix-foreground = #A0E8A2
+format-foreground = #61afef
+format-background = #2b2f37
+ramp-capacity-foreground =  ${colors.primary}  
+animation-charging-foreground = #DF8890 
+
+[settings]
+screenchange-reload = true
+pseudo-transparency = true
+; vim:ft=dosini
